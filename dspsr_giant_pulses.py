@@ -18,7 +18,7 @@ def list_files(directory, extension):
 
 parser = argparse.ArgumentParser(usage='describe usage here',
                                      description='description of script here.',epilog='Copyright (C) 2019 by Marisa Geyer')
-parser.add_argument('-dir', dest='directory_name', metavar='<directory_name>', help='specify directory where archive directories with pulsar observations are')
+parser.add_argument('-dir', dest='directory_name', metavar='<directory_name>', help='specify directory where search mode filterbank files are')
 parser.add_argument('-par', dest='par_file', metavar='<par_file>', help='specify par file')
 parser.add_argument('-input', dest='input_ext', metavar='<input_ext>', help='specify extension of input files to use. Default = ".sf"')
 parser.add_argument('-ext', dest='save_ext', metavar='<save_ext>', help='specify extension to save')
