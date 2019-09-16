@@ -68,14 +68,17 @@ if check_files_exist == []:
     print "----------------------------------------------------------------"
     print "Setting number of channels and bins"
     fullband_files = Files(args.directory_name, ext)
-    for avg_file in fullband_files:
-        avg_filepath = os.path.join(args.directory_name, avg_file)
-        avg_comand = ['pam', '--setnch','%d' %nch, '--setnbin','512','-p', '-e', '%s.p.nch%d.512nb' %(ext,nch), avg_filepath]
-        avg_comand_open = subprocess.Popen(avg_comand, shell=False, cwd='.', 
-                                       stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        (stdoutdata, stderrdata) = avg_comand_open.communicate()
-        if args.verbose:
-            print stdoutdata, stderrdata
+    if fullband_files == []:
+        print "Did not find any files with extension %s." %ext
+    else:
+        for avg_file in fullband_files:
+            avg_filepath = os.path.join(args.directory_name, avg_file)
+            avg_comand = ['pam', '--setnch','%d' %nch, '--setnbin','512','-p', '-e', '%s.p.nch%d.512nb' %(ext,nch), avg_filepath]
+            avg_comand_open = subprocess.Popen(avg_comand, shell=False, cwd='.', 
+                                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            (stdoutdata, stderrdata) = avg_comand_open.communicate()
+            if args.verbose:
+                print stdoutdata, stderrdata
 else:
     print "----------------------------------------------------------------"
     print "Files with extension %s.p.nch%d.512nb already exist. Skipping their creation." %(ext,nch)
@@ -96,7 +99,6 @@ if args.mask_file:
         print "----------------------------------------------------------------"
         print "Executing paz -z for %s" %args.directory_name
         pazi_files = Files(args.directory_name, '%s.p.nch%d.512nb' %(ext,nch))
-        print pazi_files[0]
         for pazi_file in pazi_files:
             pazi_path = os.path.join(args.directory_name, pazi_file)
             pazi_comand = ['paz', '-z', use_mask,'-e', '512nb.paz', '-v',pazi_path]
@@ -193,7 +195,12 @@ for snr_file in snr_data_files:
             ax3.set_ylabel('Channel Number')
             plt.rcParams.update({'figure.max_open_warning': 0})
             plt.savefig(os.path.join(figpath, figname))
+
+            print "----------------------------------------------------------------"
             print "----------------------------------------------------------------"
             print 'figure saved as',os.path.join(figpath, figname)
+
+            print "----------------------------------------------------------------"
+            print "----------------------------------------------------------------"
             #plt.show()
             plt.close()
