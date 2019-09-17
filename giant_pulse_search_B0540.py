@@ -150,57 +150,59 @@ for snr_file in snr_data_files:
         idx_max = np.argmax(plot_profile[0,0,0,:])
         phase_max = phase_values[idx_max]	
 
-        ph_lim0 = 0.30
-        ph_lim1 = 0.45
-        ph_lim2 = 0.50
-        ph_lim3 = 0.65
+        #ph_lim0 = 0.30
+        #ph_lim1 = 0.45
+        #ph_lim2 = 0.50
+        #ph_lim3 = 0.65
         ## These hard-coded phase windows can be changed to argse as well
 
 
-        if (phase_max > ph_lim0 and phase_max < ph_lim1) or (phase_max > ph_lim2 and phase_max < ph_lim3):
-            fig, (ax1, ax2) = plt.subplots(2,1, sharex=True)
-            fig.subplots_adjust(hspace=0)
-            ax1.plot(phase_values, plot_profile[0,0,0,:], label='SNR = %.2f'%(snr))
+        #if (phase_max > ph_lim0 and phase_max < ph_lim1) or (phase_max > ph_lim2 and phase_max < ph_lim3):
+        fig, (ax1, ax2) = plt.subplots(2,1, sharex=True)
+        fig.subplots_adjust(hspace=0)
+        ax1.plot(phase_values, plot_profile[0,0,0,:], label='SNR = %.2f'%(snr))
 
-            ax1.fill_betweenx(y=[np.min(plot_profile[0,0,0,:]),np.max(plot_profile[0,0,0,:])], x1=ph_lim0,x2=ph_lim1, alpha=0.4, color='b')
-            ax1.fill_betweenx(y=[np.min(plot_profile[0,0,0,:]),np.max(plot_profile[0,0,0,:])], x1=ph_lim2,x2=ph_lim3, alpha=0.4, color='b')
-            #ax1.axvline(x=ph_lim0, color='r', alpha=0.2, lw=2.0)
-            #ax1.axvline(x=ph_lim1, color='r', alpha=0.2, lw=2.0)
-            #ax1.axvline(x=ph_lim2, ls='dashed',alpha=0.2)
-            #ax1.axvline(x=ph_lim3, ls='dashed',alpha=0.2)
-            ax1.set_title((os.path.basename(args.directory_name),snr_file),fontsize=10) ###
-            ax1.set_ylabel('Intensity', fontsize=10)
-            ax1.legend(loc='best')
-            spec_data = freq_data.reshape(nchan,nbin)
-            
-            data_weighted = np.ones((nchan, nbin))
-            for n in range(nchan):
-                data_weighted[n] =  weights[n]*spec_data[n,:]
-            
-            lower_freq = archive_file.get_centre_frequency() - archive_file.get_bandwidth()/2.0
-            high_freq = archive_file.get_centre_frequency() + archive_file.get_bandwidth()/2.0
-            min_phase = 0
-            max_phase = 1
-            if args.directory_name.endswith("/"):
-                saven = os.path.basename(args.directory_name[0:-1])
-            else:
-                saven = os.path.basename(args.directory_name)
-            figname = '%s_%s_SNR_%.2f_phase_%.2f.png' %(saven,snr_file, snr, phase_max)
-            ax2.imshow(data_weighted, extent=(min_phase,max_phase,lower_freq, high_freq), aspect='auto', cmap='magma', origin='lower')
-            ax2.set_xlabel('Pulse Phase', fontsize=10)
-            ax2.set_ylabel('Frequency (MHz)',fontsize=10)
-            #ax2.tick_params(axis='both', which='minor', labelsize=6)
-            ax3 = ax2.twinx()
-            ax3.set_ylim(0,nchan)
-            ax3.set_ylabel('Channel Number')
-            plt.rcParams.update({'figure.max_open_warning': 0})
-            plt.savefig(os.path.join(figpath, figname))
+        #ax1.fill_betweenx(y=[np.min(plot_profile[0,0,0,:]),np.max(plot_profile[0,0,0,:])], x1=ph_lim0,x2=ph_lim1, alpha=0.4, color='b')
+        #ax1.fill_betweenx(y=[np.min(plot_profile[0,0,0,:]),np.max(plot_profile[0,0,0,:])], x1=ph_lim2,x2=ph_lim3, alpha=0.4, color='b')
+        #ax1.axvline(x=ph_lim0, color='r', alpha=0.2, lw=2.0)
+        #ax1.axvline(x=ph_lim1, color='r', alpha=0.2, lw=2.0)
+        #ax1.axvline(x=ph_lim2, ls='dashed',alpha=0.2)
+        #ax1.axvline(x=ph_lim3, ls='dashed',alpha=0.2)
+        ax1.axvline(x=phase_max, ls='dotted',alpha=0.3)
+        
+        ax1.set_title((os.path.basename(args.directory_name),snr_file),fontsize=10) ###
+        ax1.set_ylabel('Intensity', fontsize=10)
+        ax1.legend(loc='best')
+        spec_data = freq_data.reshape(nchan,nbin)
+        
+        data_weighted = np.ones((nchan, nbin))
+        for n in range(nchan):
+            data_weighted[n] =  weights[n]*spec_data[n,:]
+        
+        lower_freq = archive_file.get_centre_frequency() - archive_file.get_bandwidth()/2.0
+        high_freq = archive_file.get_centre_frequency() + archive_file.get_bandwidth()/2.0
+        min_phase = 0
+        max_phase = 1
+        if args.directory_name.endswith("/"):
+            saven = os.path.basename(args.directory_name[0:-1])
+        else:
+            saven = os.path.basename(args.directory_name)
+        figname = '%s_%s_SNR_%.2f_phase_%.2f.png' %(saven,snr_file, snr, phase_max)
+        ax2.imshow(data_weighted, extent=(min_phase,max_phase,lower_freq, high_freq), aspect='auto', cmap='magma', origin='lower')
+        ax2.set_xlabel('Pulse Phase', fontsize=10)
+        ax2.set_ylabel('Frequency (MHz)',fontsize=10)
+        #ax2.tick_params(axis='both', which='minor', labelsize=6)
+        ax3 = ax2.twinx()
+        ax3.set_ylim(0,nchan)
+        ax3.set_ylabel('Channel Number')
+        plt.rcParams.update({'figure.max_open_warning': 0})
+        plt.savefig(os.path.join(figpath, figname))
 
-            print "----------------------------------------------------------------"
-            print "----------------------------------------------------------------"
-            print 'figure saved as',os.path.join(figpath, figname)
+        print "----------------------------------------------------------------"
+        print "----------------------------------------------------------------"
+        print 'figure saved as',os.path.join(figpath, figname)
 
-            print "----------------------------------------------------------------"
-            print "----------------------------------------------------------------"
-            #plt.show()
-            plt.close()
+        print "----------------------------------------------------------------"
+        print "----------------------------------------------------------------"
+        #plt.show()
+        plt.close()
