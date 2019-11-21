@@ -87,11 +87,12 @@ else:
 if not args.mask_file:
    raise Warning("Expected mask file")
    
-    
+
+else:    
     ########################################################
     ### Paz Command
     print "Using mask:"
-    print use_mask
+    print args.mask_file
     check_files_exist = Files(args.directory_name, '%s.p.nch%d.512nb.paz' %(ext,nch))
     if check_files_exist == []:
         print "----------------------------------------------------------------"
@@ -110,10 +111,6 @@ if not args.mask_file:
         print "Files with extension %s.p.nch%d.512nb.paz already exist. Skipping their creation." %(ext,nch)
         print "----------------------------------------------------------------"
 
-else:
-        print "----------------------------------------------------------------"
-        print "No mask specified. Skipping RFI cleaning section."
- 
 
 
 ######
@@ -207,5 +204,5 @@ for snr_file in snr_data_files:
 
             print "----------------------------------------------------------------"
             print "----------------------------------------------------------------"
-            #plt.show()
-            plt.close()
+            plt.show()
+            #plt.close()
