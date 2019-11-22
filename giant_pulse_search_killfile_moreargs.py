@@ -7,11 +7,8 @@ import numpy as np
 import subprocess
 import psrchive
 import glob
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
-
 ###################################
 ## Function
 def Files(directory, extension):
@@ -31,6 +28,7 @@ parser.add_argument('-nch', dest='num_chan', metavar='<num_chan>', type=int, hel
 parser.add_argument('-v', dest='verbose', action="store_true", help='verbose output')
 parser.add_argument('-snr_cut', dest='snr_cut', metavar='<snr_cut>', type=float, help='specify SNR cut for finding giant pulses. Default is 10')
 parser.add_argument('-fig_path', dest='fig_path', type=str, help='Specify pathway to where figures will be saved')
+parser.add_argument('-zap_ext', dest='zap_ext', type=str, help='Extension to save files that have been zapped with args.mask_file with.')
 args = parser.parse_args()
 
 ## Giant pulse image plots path
@@ -100,10 +98,11 @@ else:
     if check_files_exist == []:
         print "----------------------------------------------------------------"
         print "Executing paz -k for %s" %args.directory_name
+        print "Will save files with extension %s" args.zap_ext 
         pazi_files = Files(args.directory_name, '%s.p.nch%d.512nb' %(ext,nch))
         for pazi_file in pazi_files:
             pazi_path = os.path.join(args.directory_name, pazi_file)
-            pazi_comand = ['paz', '-k', args.mask_file,'-e', '512nb.paz', '-v',pazi_path]
+            pazi_comand = ['paz', '-k', args.mask_file,'-e', '512nb'+str(args.zap_ext), '-v',pazi_path]
             pazi_comand_open = subprocess.Popen(pazi_comand, shell=False, cwd='.', 
                                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             (stdoutdata, stderrdata) = pazi_comand_open.communicate()
