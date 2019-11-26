@@ -1,4 +1,4 @@
-#!/usr/bin/python 
+#!/homes/vkrishnan/anaconda2/bin/python
 
 ## Python Modules
 import os
@@ -58,7 +58,7 @@ for filetofold in selected_files:
         os.mkdir(dirtomake)
     os.chdir(dirtomake)   
     print filetofold
-    command= ['dspsr', '-k','MeerKAT', '-scloffs','-K', '-s', '-E', foldingpar, '-b','1024', '-e',ext, filetofold]
+    command= ['dspsr', '-k','MeerKAT', '-scloffs', '-s', '-E', foldingpar, '-b','1024', '-e',ext, filetofold]
     dspsr_file = subprocess.Popen(command, shell=False, cwd='.', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     (stdoutdata, stderrdata) = dspsr_file.communicate()
     return_code = dspsr_file.returncode

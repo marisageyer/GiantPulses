@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(usage='describe usage here',
                                      description='description of script here.',epilog='Copyright (C) 2019 by Marisa Geyer')
 parser.add_argument('-dir', dest='directory_name', metavar='<directory_name>', help='specify directory where archive directories with single pulse archives with extension args.ext are')
 parser.add_argument('-ext', dest='ext', metavar='<ext>', help='specify extension of files to be added. Default is fullband.')
-parser.add_argument('-save_ext', dest='save_ext', metavar='<save_ext>', help='specify directory to save to. Default is total')
+parser.add_argument('-save_ext', dest='save_ext', metavar='<save_ext>', help='specify extension to save to added archives. Default is total')
 args = parser.parse_args()
 
 #dirname = '/scratch02/mgeyer/Jones_HonsProj/SEARCH_DATA/Marchdata/Singles_MBpar'
